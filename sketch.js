@@ -3,6 +3,7 @@ southPoles = [];
 particles = [];
 
 var showDir = false;
+var proximity = 30;
 
 var mouseDragging = false;
 
@@ -28,6 +29,7 @@ var preset2Button;
 var preset3Button;
 var preset4Button;
 var showDirButton;
+var disperseParticlesButton;
 
 /*var myFont;
 function preload() {
@@ -35,6 +37,7 @@ function preload() {
 }*/
 
 function setup() {
+    disperseParticles();
     //createCanvas(1905, 880);
     var cnv = createCanvas(windowWidth -15,windowHeight - 200);
     cnv.style('display', 'block');
@@ -86,6 +89,10 @@ function setup() {
     showDirButton = createButton("Show Direction");
     showDirButton.mousePressed(showDirection);
     showDirButton.parent('sketch-holder');
+
+    disperseParticlesButton = createButton("Disperse Particle");
+    disperseParticlesButton.mousePressed(disperseParticles);
+    disperseParticlesButton.parent('sketch-holder');
 }
 //fps counter
  let be = Date.now(),fps=0;
@@ -108,6 +115,21 @@ function setup() {
          kpFps.value = fps
      }
   )
+
+function disperseParticles(){
+  var particlePositions = [];
+  for(var i = 10; i < windowWidth - 10; i += proximity){
+    for(var j = 10; j < windowHeight -10; j += proximity){
+      newPos = createVector(i, j);
+      particlePositions.push(newPos);
+      console.log(particlePositions);
+    }
+  }
+  for(var k = 0; k < particlePositions.length; k++){
+    var newParticle = new particle(particlePositions[k].x, particlePositions[k].y);
+    particles.push(newParticle);
+  }
+}
 
 function draw() {
     background(250);
