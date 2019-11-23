@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
 <head>
   <meta charset="UTF-8">
@@ -12,9 +13,12 @@
     <header align = "center"> Magnetic Field Simulator</header>
     <div id="sketch-holder">
     </div>
-    <p>Preset 1: Bar Magnet&nbsp;&nbsp;&nbsp;&nbsp;Preset 2: Two North Poles &nbsp;&nbsp;&nbsp;&nbsp;Preset 3: Bar Magnet?!&nbsp;&nbsp;&nbsp;&nbsp;Preset 4: Positively charged particle next to a negatively charged plate  </p>
+    <p>Preset 1: Bar Magnet&nbsp;&nbsp;&nbsp;&nbsp;Preset 2: Two North Poles &nbsp;&nbsp;&nbsp;&nbsp;Preset 3: Bar Magnet&nbsp;&nbsp;&nbsp;&nbsp;Preset 4: Positively charged particle next to a negatively charged plate  </p>
     <p>Drag around the poles to create your own configurations and add particles by clicking.</p>
     <p>Hover over the poles and scroll to adjust their strength.</p>
     <p>Fast placement allows you to quickly place particles by dragging the mouse.</p>
+
+    <span id="kFps"></span>
+<progress id="kpFps" value="0" min="0" max="100" style="vertical-align:middle"></progress>
 </body>
 </html>

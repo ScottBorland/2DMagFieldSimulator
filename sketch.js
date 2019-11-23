@@ -1,17 +1,20 @@
 northPoles = [];
 southPoles = [];
-compasses = [];
+particles = [];
 
 var mouseDragging = false;
 
 var counter = 0;
-
+//scalers
 var strengthScaler = 50;
 var distanceScaler = 10;
 var velMultiplier = 10;
 
+//mode control
 var mode = 'click';
 var EditMode = false;
+
+//buttons
 var modeButton;
 var toggleEditModeButton;
 var clearTrailsButton;
@@ -33,53 +36,75 @@ function setup() {
     var cnv = createCanvas(windowWidth -15,windowHeight - 200);
     cnv.style('display', 'block');
     cnv.parent('sketch-holder');
-    
+
     toggleEditModeButton = createButton("Toggle Edit mode");
     toggleEditModeButton.parent('sketch-holder');
     toggleEditModeButton.mousePressed(toggleEditMode);
-    
+
     modeButton = createButton("Toggle fast placement");
     modeButton.position = (windowWidth - 50, windowHeight -60);
     modeButton.parent('sketch-holder');
     modeButton.mousePressed(toggleMode);
-    
+
     clearTrailsButton = createButton("Clear trails");
     clearTrailsButton.position = (windowWidth -100, windowHeight -30);
     clearTrailsButton.parent('sketch-holder');
     clearTrailsButton.mousePressed(clearTrails);
-    
+
     clearCanvasButton = createButton("Clear all");
     clearCanvasButton.position = (windowWidth -153, windowHeight -37);
     clearCanvasButton.mousePressed(clearCanvas);
     clearCanvasButton.parent('sketch-holder');
-    
+
     addNorthButton = createButton("Add North");
     addNorthButton.mousePressed(addNorth);
     addNorthButton.parent('sketch-holder');
-    
+
     addSouthButton = createButton("Add South");
     addSouthButton.mousePressed(addSouth);
     addSouthButton.parent('sketch-holder');
-    
+
     preset1Button = createButton("Preset 1");
     preset1Button.mousePressed(preset1);
     preset1Button.parent('sketch-holder');
-    
+
     preset2Button = createButton("Preset 2");
     preset2Button.mousePressed(preset2);
     preset2Button.parent('sketch-holder');
-    
+
     preset3Button = createButton("Preset 3");
     preset3Button.mousePressed(preset3);
     preset3Button.parent('sketch-holder');
-    
+
     preset4Button = createButton("Preset 4");
     preset4Button.mousePressed(preset4);
     preset4Button.parent('sketch-holder');
 }
+//fps counter
+ let be = Date.now(),fps=0;
+ requestAnimationFrame(
+     function loop(){
+         let now = Date.now()
+         fps = Math.round(1000 / (now - be))
+         be = now
+         requestAnimationFrame(loop)
+         if (fps < 35){
+           kFps.style.color = "red"
+           kFps.textContent = fps
+         } if (fps >= 35 && fps <= 41) {
+             kFps.style.color = "deepskyblue"
+             kFps.textContent = fps + " FPS"
+           } else {
+             kFps.style.color = "black"
+             kFps.textContent = fps + " FPS"
+         }
+         kpFps.value = fps
+     }
+  )
 
 function draw() {
-    background(51);
+    background(250);
+    //showFPS();
     for(var i = northPoles.length -1; i >= 0; i--){
     northPoles[i].display();
     northPoles[i].drag();
@@ -88,12 +113,12 @@ function draw() {
     southPoles[i].display();
     southPoles[i].drag();
     }
-    for(var i = compasses.length -1; i >= 0; i--){
-        if(compasses[i].delete == false){
-        compasses[i].update();
-        compasses[i].behaviours();
+    for(var i = particles.length -1; i >= 0; i--){
+        if(particles[i].delete == false){
+        particles[i].update();
+        particles[i].behaviours();
         }
-        compasses[i].show();
+        particles[i].show();
     }
     counter++;
     if(counter > 100){
@@ -106,13 +131,13 @@ function windowResized() {
 }
 
 function clearTrails(){
-    compasses.splice(0, compasses.length);
+    particles.splice(0, particles.length);
 }
 
 function clearCanvas(){
     northPoles.splice(0, northPoles.length);
     southPoles.splice(0, southPoles.length);
-    compasses.splice(0, compasses.length);
+    particles.splice(0, particles.length);
 }
 
 function addNorth(){
@@ -169,7 +194,7 @@ function preset4(){
     southPoles[12] = new southPole(windowWidth / 2 + 200, windowHeight / 2-250, 40);
 	southPoles[13] = new southPole(windowWidth / 2 + 200, windowHeight / 2-280, 40);
 	southPoles[14] = new southPole(windowWidth / 2 + 200, windowHeight / 2-310, 40);
-    southPoles[15] = new southPole(windowWidth / 2 + 200, windowHeight / 2-340, 40);    
+    southPoles[15] = new southPole(windowWidth / 2 + 200, windowHeight / 2-340, 40);
 }
 
 function toggleMode(){
@@ -191,7 +216,7 @@ function toggleEditMode(){
 
 function mouseReleased(){
     for(var i = 0; i < northPoles.length; i++){
-      northPoles[i].dragging = false;  
+      northPoles[i].dragging = false;
     }
     for(var i = 0; i < southPoles.length; i++){
         southPoles[i].dragging = false;
@@ -201,8 +226,8 @@ function mouseReleased(){
 
 function mousePressed(){
     if(mouseButton === LEFT && mode == 'click' && mouseDragging == false && EditMode == false){
-        newCompass = new compass(mouseX, mouseY);
-        compasses.push(newCompass);
+        newparticle = new particle(mouseX, mouseY);
+        particles.push(newparticle);
         }
     for(var i = 0; i < northPoles.length; i++){
         if(mouseX > northPoles[i].x && mouseX < northPoles[i].x + northPoles[i].w && mouseY > northPoles[i].y && mouseY < northPoles[i].y + northPoles[i].w && EditMode){
@@ -243,8 +268,8 @@ function mouseWheel(event){
 function mouseDragged(){
     if(mouseButton === LEFT && mode == 'drag' && EditMode == false){
         if(counter % 4 == 0){
-        newCompass = new compass(mouseX, mouseY);
-        compasses.push(newCompass);
+        newparticle = new particle(mouseX, mouseY);
+        particles.push(newparticle);
         }
     }
 }
@@ -253,17 +278,17 @@ function northPole(x, y, strength){
     this.x = x;
     this.y = y;
     this.s = strength;
-    
+
     this.w = 30 * this.s / 40;
 
     this.fillColour = color(255, 0, 42);
-    
+
     this.dragging = false;
     this.rollover = false;
-    
+
     this.offsetX;
     this.offsetY;
-    
+
     this.display = function(){
 
         if(this.dragging){
@@ -273,11 +298,11 @@ function northPole(x, y, strength){
         }else{
             this.fillColour = color(255, 0, 42);
         }
-        
+
         push()
         rotate(0);
         rectMode(CENTER);
-        stroke(this.fillColour);
+        stroke(18, 17, 18);
         fill(this.fillColour);
         rect(this.x, this.y, 30 * this.s / 40, 30 * this.s / 40);
         stroke(255, 255, 255);
@@ -287,7 +312,7 @@ function northPole(x, y, strength){
         //text('N', this.x, this.y);
         pop();
     }
-    
+
     this.drag = function(){
         if(mouseX > this.x && mouseX < this.x + this.w && mouseY > this.y && mouseY < this.y + this.w && EditMode){
             this.rollover = true;
@@ -297,7 +322,7 @@ function northPole(x, y, strength){
         if(this.dragging){
             this.x = mouseX + this.offsetX;
             this.y = mouseY + this.offsetY;
-        }   
+        }
     }
 }
 
@@ -305,14 +330,14 @@ function southPole(x, y, strength){
     this.x = x;
     this.y = y;
     this.s = strength;
-    
+
     this.w = 30 * this.s /40;
-    
+
     this.fillColour = color(0, 12, 252);
-    
+
     this.dragging = false;
     this.rollover = false;
-    
+
     this.offsetX;
     this.offsetY;
 
@@ -327,7 +352,7 @@ function southPole(x, y, strength){
         push();
         rotate(0);
         rectMode(CENTER);
-        stroke(this.fillColour);
+        stroke(18, 17, 18);
         fill(this.fillColour);
         rect(this.x, this.y, 30 * this.s /40, 30 * this.s/40);
         stroke(255, 255, 255);
@@ -349,26 +374,26 @@ function southPole(x, y, strength){
     if(this.dragging){
         this.x = mouseX + this.offsetX;
         this.y = mouseY + this.offsetY;
-        }   
+        }
     }
 }
 
 
-function compass(x, y){
+function particle(x, y){
     this.position = createVector(x, y);
     this.velocity = createVector(0, 0);
-    this.maxspeed = 10;
+    this.maxspeed = 2;
     this.angle = 0;
 
     this.velN = createVector(0, 0);
     this.velS = createVector(0, 0);
-    
+
     this.delete = false;
 
     this.history = [];
 
     this.update = function(){
-     
+
         var pos = createVector(this.position.x, this.position.y);
         this.history.push(pos);
         this.velocity = createVector(0, 0);
@@ -420,7 +445,7 @@ function compass(x, y){
 
         //var mag = map(dist, 0, magnet.s * strengthScaler, 0, this.maxforce);
         dif.setMag(mag);
-        this.applyForceS(dif); 
+        this.applyForceS(dif);
     }
 
 
@@ -432,23 +457,23 @@ function compass(x, y){
         translate(this.position.x, this.position.y);
         rotate(angle);
 
-        fill(255, 255, 0);
-        stroke(255, 255, 0);
+        fill(103, 47, 138);
+        stroke(103, 47, 138);
         strokeWeight(1);
 
         beginShape();
 
-        vertex(0, -15);
+        vertex(0, -5);
 
-        vertex(-7.5, 15);
+        vertex(-2.5, 5);
 
-        vertex(7.5, 15);
+        vertex(2.5, 5);
 
         endShape(CLOSE);
 
         pop();
         }
-        
+
         noFill();
         beginShape();
         for(var i = 0; i < this.history.length; i++){
@@ -468,42 +493,24 @@ function compass(x, y){
             var origin = createVector(0, 0,);
             var angle = Math.atan2(diff.y - origin.y, diff.x - origin.x);
             angle += PI/2;
-            
+
             push();
             translate(this.history[h].x, this.history[h].y);
             rotate(angle);
-            
+
             fill(0, 0, 0);
             stroke(0, 0, 0);
             strokeWeight(0.75);
-            
+
             beginShape();
-            vertex(0, -10);
-            vertex(-5, 10);
-            vertex(5, 10);
-            
+            vertex(0, -5);
+            vertex(-2.5, 5);
+            vertex(2.5, 5);
+
             endShape(CLOSE);
-            
+
             pop();
         }
 
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
