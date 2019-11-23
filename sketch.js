@@ -2,6 +2,8 @@ northPoles = [];
 southPoles = [];
 particles = [];
 
+var showDir = false;
+
 var mouseDragging = false;
 
 var counter = 0;
@@ -25,6 +27,7 @@ var preset1Button;
 var preset2Button;
 var preset3Button;
 var preset4Button;
+var showDirButton;
 
 /*var myFont;
 function preload() {
@@ -79,6 +82,10 @@ function setup() {
     preset4Button = createButton("Preset 4");
     preset4Button.mousePressed(preset4);
     preset4Button.parent('sketch-holder');
+
+    showDirButton = createButton("Show Direction");
+    showDirButton.mousePressed(showDirection);
+    showDirButton.parent('sketch-holder');
 }
 //fps counter
  let be = Date.now(),fps=0;
@@ -104,7 +111,7 @@ function setup() {
 
 function draw() {
     background(250);
-    //showFPS();
+
     for(var i = northPoles.length -1; i >= 0; i--){
     northPoles[i].display();
     northPoles[i].drag();
@@ -114,7 +121,7 @@ function draw() {
     southPoles[i].drag();
     }
     for(var i = particles.length -1; i >= 0; i--){
-        if(particles[i].delete == false){
+        if(particles[i].finished == false){
         particles[i].update();
         particles[i].behaviours();
         }
@@ -140,6 +147,10 @@ function clearCanvas(){
     particles.splice(0, particles.length);
 }
 
+function showDirection(){
+  showDir = (showDir == true) ? (showDir = false) : (showDir = true);
+}
+
 function addNorth(){
     northPoles.push(new northPole(windowWidth / 2 + random(50), (windowHeight -200) / 2 + random(50), 20));
 }
@@ -147,6 +158,11 @@ function addNorth(){
 function addSouth(){
     southPoles.push(new southPole(windowWidth /2 + random(50), (windowHeight -200) / 2 + random(50), 20));
 }
+
+/*function showDirection(){
+  if(showDirection == true) showDirection = false;
+  else showDirection = true;
+}*/
 
 function preset1(){
     clearCanvas();
@@ -271,246 +287,5 @@ function mouseDragged(){
         newparticle = new particle(mouseX, mouseY);
         particles.push(newparticle);
         }
-    }
-}
-
-function northPole(x, y, strength){
-    this.x = x;
-    this.y = y;
-    this.s = strength;
-
-    this.w = 30 * this.s / 40;
-
-    this.fillColour = color(255, 0, 42);
-
-    this.dragging = false;
-    this.rollover = false;
-
-    this.offsetX;
-    this.offsetY;
-
-    this.display = function(){
-
-        if(this.dragging){
-            this.fillColour = color(122, 23, 39);
-        }else if(this.rollover){
-            this.fillColour = color(198, 7, 39);
-        }else{
-            this.fillColour = color(255, 0, 42);
-        }
-
-        push()
-        rotate(0);
-        rectMode(CENTER);
-        stroke(18, 17, 18);
-        fill(this.fillColour);
-        rect(this.x, this.y, 30 * this.s / 40, 30 * this.s / 40);
-        stroke(255, 255, 255);
-        fill(255, 255, 255);
-        //textAlign(CENTER, CENTER);
-        //textFont(myFont, 36 * this.s /40);
-        //text('N', this.x, this.y);
-        pop();
-    }
-
-    this.drag = function(){
-        if(mouseX > this.x && mouseX < this.x + this.w && mouseY > this.y && mouseY < this.y + this.w && EditMode){
-            this.rollover = true;
-        } else{
-            this.rollover = false;
-        }
-        if(this.dragging){
-            this.x = mouseX + this.offsetX;
-            this.y = mouseY + this.offsetY;
-        }
-    }
-}
-
-function southPole(x, y, strength){
-    this.x = x;
-    this.y = y;
-    this.s = strength;
-
-    this.w = 30 * this.s /40;
-
-    this.fillColour = color(0, 12, 252);
-
-    this.dragging = false;
-    this.rollover = false;
-
-    this.offsetX;
-    this.offsetY;
-
-    this.display = function(){
-        if(this.dragging){
-            this.fillColour = color(0, 4, 86);
-        }else if(this.rollover){
-            this.fillColour = color(1, 10, 173);
-        }else{
-            this.fillColour = color(0, 12, 252);
-        }
-        push();
-        rotate(0);
-        rectMode(CENTER);
-        stroke(18, 17, 18);
-        fill(this.fillColour);
-        rect(this.x, this.y, 30 * this.s /40, 30 * this.s/40);
-        stroke(255, 255, 255);
-        fill(255, 255, 255);
-        //textAlign(CENTER, CENTER);
-        //textFont(myFont, 36 * this.s /40);
-        //text('S', this.x, this.y);
-        noFill();
-        //ellipse(this.x, this.y, this.s * strengthScaler);
-        pop();
-    }
-    this.drag = function(){
-    if(mouseX > this.x && mouseX < this.x + this.w && mouseY > this.y && mouseY < this.y + this.w && EditMode)
-    {
-        this.rollover = true;
-    } else{
-        this.rollover = false;
-    }
-    if(this.dragging){
-        this.x = mouseX + this.offsetX;
-        this.y = mouseY + this.offsetY;
-        }
-    }
-}
-
-
-function particle(x, y){
-    this.position = createVector(x, y);
-    this.velocity = createVector(0, 0);
-    this.maxspeed = 2;
-    this.angle = 0;
-
-    this.velN = createVector(0, 0);
-    this.velS = createVector(0, 0);
-
-    this.delete = false;
-
-    this.history = [];
-
-    this.update = function(){
-
-        var pos = createVector(this.position.x, this.position.y);
-        this.history.push(pos);
-        this.velocity = createVector(0, 0);
-        this.velocity.add(this.velN);
-        this.velocity.add(this.velS);
-        this.velocity.mult(velMultiplier);
-        this.velocity.limit(this.maxspeed);
-        this.position.add(this.velocity);
-        this.velN = createVector(0, 0);
-        this.velS = createVector(0, 0);
-    }
-
-    this.applyForceN = function(force){
-        this.velN.add(force);
-    }
-
-    this.applyForceS = function(force){
-        this.velS.add(force);
-    }
-
-    this.behaviours = function(){
-        for(var i = 0; i < northPoles.length; i++){
-            this.reactN(northPoles[i]);
-        }
-        for(var i = 0; i < southPoles.length; i++){
-            this.reactS(southPoles[i]);
-        }
-    }
-
-
-    this.reactN = function(magnet){
-        var dif = p5.Vector.sub(createVector(magnet.x, magnet.y), this.position);
-        var dist = p5.Vector.dist(createVector(magnet.x, magnet.y), this.position);
-        if(dist < 6){
-            this.delete = true;
-        }
-        var mag = distanceScaler * 50 * magnet.s / (dist * dist);
-        dif.setMag(-mag);
-        this.applyForceN(dif);
-    }
-
-     this.reactS = function(magnet){
-        var dif = p5.Vector.sub(createVector(magnet.x, magnet.y), this.position);
-        var dist = p5.Vector.dist(createVector(magnet.x, magnet.y), this.position);
-        if(dist < 6){
-            this.delete = true;
-        }
-        var mag = distanceScaler *50 * magnet.s/ (dist * dist);
-
-        //var mag = map(dist, 0, magnet.s * strengthScaler, 0, this.maxforce);
-        dif.setMag(mag);
-        this.applyForceS(dif);
-    }
-
-
-    this.show = function(){
-        if(this.delete == false){
-        var angle = this.velocity.heading() + PI / 2;
-
-        push();
-        translate(this.position.x, this.position.y);
-        rotate(angle);
-
-        fill(103, 47, 138);
-        stroke(103, 47, 138);
-        strokeWeight(1);
-
-        beginShape();
-
-        vertex(0, -5);
-
-        vertex(-2.5, 5);
-
-        vertex(2.5, 5);
-
-        endShape(CLOSE);
-
-        pop();
-        }
-
-        noFill();
-        beginShape();
-        for(var i = 0; i < this.history.length; i++){
-            var pos = this.history[i];
-            //fill(255, 64, 65);
-            //ellipse(pos.x, pos.y, 5, 5);
-            //console.log(this.history.length);
-            vertex(pos.x, pos.y);
-        }
-        endShape();
-        if(this.delete && this.history.length > 4){
-            var h = floor(this.history.length / 2);
-            //var angle = this.position.angleBetween(this.history[h+1]);
-            var v1 = this.history[h];
-            var v2 = this.history[h+1];
-            var diff = p5.Vector.sub(v2, v1);
-            var origin = createVector(0, 0,);
-            var angle = Math.atan2(diff.y - origin.y, diff.x - origin.x);
-            angle += PI/2;
-
-            push();
-            translate(this.history[h].x, this.history[h].y);
-            rotate(angle);
-
-            fill(0, 0, 0);
-            stroke(0, 0, 0);
-            strokeWeight(0.75);
-
-            beginShape();
-            vertex(0, -5);
-            vertex(-2.5, 5);
-            vertex(2.5, 5);
-
-            endShape(CLOSE);
-
-            pop();
-        }
-
     }
 }
