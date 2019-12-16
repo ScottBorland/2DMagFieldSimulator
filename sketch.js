@@ -10,8 +10,11 @@ var mouseDragging = false;
 var counter = 0;
 //scalers
 var strengthScaler = 50;
-var distanceScaler = 10;
+var distanceScaler = 500;
 var velMultiplier = 10;
+
+//default to 0.15, lower means curve has more detail
+var maxGradDifference = 0.005;
 
 //mode control
 var mode = 'click';
@@ -30,6 +33,7 @@ var preset3Button;
 var preset4Button;
 var showDirButton;
 var disperseParticlesButton;
+var trimPointsButton;
 
 /*var myFont;
 function preload() {
@@ -37,7 +41,7 @@ function preload() {
 }*/
 
 function setup() {
-    disperseParticles();
+    //disperseParticles();
     //createCanvas(1905, 880);
     var cnv = createCanvas(windowWidth -15,windowHeight - 200);
     cnv.style('display', 'block');
@@ -93,6 +97,12 @@ function setup() {
     disperseParticlesButton = createButton("Disperse Particle");
     disperseParticlesButton.mousePressed(disperseParticles);
     disperseParticlesButton.parent('sketch-holder');
+
+    /*
+    trimPointsButton = createButton("trim points");
+    trimPointsButton.mousePressed(calltrimPoints);
+    trimPointsButton.parent('sketch-holder');
+    */
 }
 //fps counter
  let be = Date.now(),fps=0;
@@ -122,13 +132,53 @@ function disperseParticles(){
     for(var j = 10; j < windowHeight -10; j += proximity){
       newPos = createVector(i, j);
       particlePositions.push(newPos);
-      console.log(particlePositions);
+      //console.log(particlePositions);
     }
   }
   for(var k = 0; k < particlePositions.length; k++){
     var newParticle = new particle(particlePositions[k].x, particlePositions[k].y);
     particles.push(newParticle);
   }
+}
+
+function roundVector(vector){
+  let x = vector.x;
+  let y = vector.y;
+  x = Number(x.toFixed(2));
+  y = Number(y.toFixed(2));
+  return createVector(x, y);
+}
+/*
+function calltrimPoints(){
+  for(var i = particles.length -1; i >= 0; i--){
+    if(particles[i].history.length > 8){
+    particles[i].history = trimPoints(particles[i].history);
+    //delSomePoints(particles[i].history);
+    }
+  }
+}*/
+
+function trimPoints(Array){
+    var pointsArray = Array;
+    let pointsToSplice = [];
+    var listFullyTrimmed = false;
+    if(listFullyTrimmed == false){
+    for(var i = 2; i < (pointsArray.length - 5); i++){
+      var grad1 = (pointsArray[i + 1].y - pointsArray[i].y) / (pointsArray[i + 1].x - pointsArray[i].x);
+      var grad2 = (pointsArray[i + 2].y - pointsArray[i + 1].y) / (pointsArray[i + 2].x - pointsArray[i + 1].x);
+      if(Math.abs(grad1 - grad2) < maxGradDifference){
+        pointsToSplice.push(i);
+      }
+    }
+
+  for(var i = 0; i < pointsToSplice.length; i++){
+    var index = pointsToSplice[i];
+    if(index < pointsArray.length - 2){
+    pointsArray.splice(index + 1, 1);
+  }
+    }
+  }
+  return pointsArray;
 }
 
 function draw() {
@@ -143,9 +193,19 @@ function draw() {
     southPoles[i].drag();
     }
     for(var i = particles.length -1; i >= 0; i--){
-        if(particles[i].finished == false){
+      /*if(particles[i].finished == true){
+        particles.splice(i, 1);
+      } else{
         particles[i].update();
         particles[i].behaviours();
+        particles[i].show();
+      }*/
+
+
+
+   if(particles[i].finished == false){
+          particles[i].update();
+          particles[i].behaviours();
         }
         particles[i].show();
     }

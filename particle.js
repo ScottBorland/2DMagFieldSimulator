@@ -42,25 +42,36 @@ function particle(x, y){
         }
     }
 
-
     this.reactN = function(magnet){
         var dif = p5.Vector.sub(createVector(magnet.x, magnet.y), this.position);
         var dist = p5.Vector.dist(createVector(magnet.x, magnet.y), this.position);
+
+        //dist = Number(dist.toFixed(2));
+
         if(dist < 6){
             this.finished = true;
         }
-        var mag = distanceScaler * 50 * magnet.s / (dist * dist);
+        var mag = distanceScaler * magnet.s / (dist * dist);
+
+        //mag = Number(mag.toFixed(2));
+
         dif.setMag(-mag);
+        //dif = roundVector(dif);
         this.applyForceN(dif);
     }
 
      this.reactS = function(magnet){
         var dif = p5.Vector.sub(createVector(magnet.x, magnet.y), this.position);
         var dist = p5.Vector.dist(createVector(magnet.x, magnet.y), this.position);
-        if(dist < 6){
+
+        //dist = Number(dist.toFixed(2));
+
+        if(dist < 6 || this.position.x < 0 || this.position.x > width || this.position.y < 0 || this.position.y > height){
             this.finished = true;
         }
-        var mag = distanceScaler *50 * magnet.s/ (dist * dist);
+        var mag = distanceScaler * magnet.s/ (dist * dist);
+
+        //mag = Number(mag.toFixed(2));
 
         //var mag = map(dist, 0, magnet.s * strengthScaler, 0, this.maxforce);
         dif.setMag(mag);
@@ -71,25 +82,17 @@ function particle(x, y){
     this.show = function(){
         if(this.finished == false){
         var angle = this.velocity.heading() + PI / 2;
-
         push();
         translate(this.position.x, this.position.y);
         rotate(angle);
-
         fill(103, 47, 138);
         stroke(103, 47, 138);
         strokeWeight(1);
-
         beginShape();
-
         vertex(0, -5);
-
         vertex(-2.5, 5);
-
         vertex(2.5, 5);
-
         endShape(CLOSE);
-
         pop();
         }
 
@@ -103,6 +106,11 @@ function particle(x, y){
             vertex(pos.x, pos.y);
         }
         endShape();
+
+        if(this.finished && this.history.length > 4){
+          trimPoints(this.history);
+        }
+
         if(this.finished && this.history.length > 4 && showDir == true){
             var h = floor(this.history.length / 2);
             //var angle = this.position.angleBetween(this.history[h+1]);

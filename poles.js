@@ -3,7 +3,7 @@ function northPole(x, y, strength){
     this.y = y;
     this.s = strength;
 
-    this.w = 30 * this.s / 40;
+    this.w = this.s * 0.75;
 
     this.fillColour = color(255, 0, 42);
 
@@ -28,7 +28,7 @@ function northPole(x, y, strength){
         rectMode(CENTER);
         stroke(18, 17, 18);
         fill(this.fillColour);
-        rect(this.x, this.y, 30 * this.s / 40, 30 * this.s / 40);
+        rect(this.x, this.y, 0.75 * this.s, 0.75 * this.s);
         stroke(255, 255, 255);
         fill(255, 255, 255);
         //textAlign(CENTER, CENTER);
@@ -55,7 +55,7 @@ function southPole(x, y, strength){
     this.y = y;
     this.s = strength;
 
-    this.w = 30 * this.s /40;
+    this.w = 0.75 * this.s;
 
     this.fillColour = color(0, 12, 252);
 
@@ -78,7 +78,7 @@ function southPole(x, y, strength){
         rectMode(CENTER);
         stroke(18, 17, 18);
         fill(this.fillColour);
-        rect(this.x, this.y, 30 * this.s /40, 30 * this.s/40);
+        rect(this.x, this.y, 0.75 * this.s, 0.75 * this.s);
         stroke(255, 255, 255);
         fill(255, 255, 255);
         //textAlign(CENTER, CENTER);
