@@ -12,7 +12,7 @@ function particle(x, y){
     this.history = [];
 
     this.update = function(){
-      
+
         var pos = createVector(this.position.x, this.position.y);
         this.history.push(pos);
         this.velocity = createVector(0, 0);
@@ -97,7 +97,7 @@ function particle(x, y){
         }
 
         noFill();
-        beginShape();
+        /*beginShape();
         for(var i = 0; i < this.history.length; i++){
             var pos = this.history[i];
             //fill(255, 64, 65);
@@ -105,11 +105,11 @@ function particle(x, y){
             //console.log(this.history.length);
             vertex(pos.x, pos.y);
         }
-        endShape();
-
-        if(this.finished && this.history.length > 4){
-          trimPoints(this.history);
-        }
+        endShape();*/
+        if(this.history.length > 1){
+        let index = this.history.length - 1;
+        line(this.position.x, this.position.y, this.history[index].x, this.history[index].y);
+      }
 
         if(this.finished && this.history.length > 4 && showDir == true){
             var h = floor(this.history.length / 2);
