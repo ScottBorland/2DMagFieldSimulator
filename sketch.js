@@ -36,6 +36,19 @@ var disperseParticlesButton;
 var trimPointsButton;
 var showPolesButton;
 
+//perlin noise variables
+var xr = 0.0;
+var xg = 100.0;
+var xb = 2000.0;
+
+//arbitrary values
+var iR = 1000;
+var iB = 100;
+var iG = 1;
+
+//rate at which perlin noise function is looped through
+var speed = 0.04;
+
 /*var myFont;
 function preload() {
   myFont = loadFont('assets/Anonymous_Pro.ttf');
@@ -230,6 +243,17 @@ function draw() {
       particles.splice(i, 1);
     }
   }
+  //perlin noise
+  var rx = xr + iR;
+  var gx = xg + iG;
+  var bx = xb + iB;
+  r = map(noise(rx, 1), 0, 1, 0, 255);
+  g = map(noise(gx, 1), 0, 1, 0, 255);
+  b = map(noise(bx, 1), 0, 1, 0, 255);
+
+  xr += speed;
+  xg += speed;
+  xb += speed;
 }
 
 function windowResized() {
@@ -238,7 +262,7 @@ function windowResized() {
 
 function clearTrails(){
     particles.splice(0, particles.length);
-    background(backgroundColour);
+    background(255, 255, 255);
 }
 
 function clearCanvas(){

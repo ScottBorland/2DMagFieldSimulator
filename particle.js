@@ -96,18 +96,10 @@ function particle(x, y){
         pop();*/
         }
 
-        noFill();
-        /*beginShape();
-        for(var i = 0; i < this.history.length; i++){
-            var pos = this.history[i];
-            //fill(255, 64, 65);
-            //ellipse(pos.x, pos.y, 5, 5);
-            //console.log(this.history.length);
-            vertex(pos.x, pos.y);
-        }
-        endShape();*/
         if(this.history.length > 1){
         let index = this.history.length - 1;
+        let c = color(r, g, b);
+        stroke(c);
         line(this.position.x, this.position.y, this.history[index].x, this.history[index].y);
       }
 
