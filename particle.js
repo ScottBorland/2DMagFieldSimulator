@@ -12,7 +12,7 @@ function particle(x, y){
     this.history = [];
 
     this.update = function(){
-
+      
         var pos = createVector(this.position.x, this.position.y);
         this.history.push(pos);
         this.velocity = createVector(0, 0);
@@ -48,7 +48,7 @@ function particle(x, y){
 
         //dist = Number(dist.toFixed(2));
 
-        if(dist < 6){
+        if(dist < 6 || this.position.x < 0 || this.position.x > width || this.position.y < 0 || this.position.y > height){
             this.finished = true;
         }
         var mag = distanceScaler * magnet.s / (dist * dist);
@@ -82,7 +82,7 @@ function particle(x, y){
     this.show = function(){
         if(this.finished == false){
         var angle = this.velocity.heading() + PI / 2;
-        push();
+        /*push();
         translate(this.position.x, this.position.y);
         rotate(angle);
         fill(103, 47, 138);
@@ -93,7 +93,7 @@ function particle(x, y){
         vertex(-2.5, 5);
         vertex(2.5, 5);
         endShape(CLOSE);
-        pop();
+        pop();*/
         }
 
         noFill();

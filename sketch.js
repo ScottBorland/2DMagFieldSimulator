@@ -41,6 +41,7 @@ function preload() {
 }*/
 
 function setup() {
+    background(250);
     //disperseParticles();
     //createCanvas(1905, 880);
     var cnv = createCanvas(windowWidth -15,windowHeight - 200);
@@ -182,7 +183,7 @@ function trimPoints(Array){
 }
 
 function draw() {
-    background(250);
+
 
     for(var i = northPoles.length -1; i >= 0; i--){
     northPoles[i].display();
@@ -206,13 +207,16 @@ function draw() {
    if(particles[i].finished == false){
           particles[i].update();
           particles[i].behaviours();
-        }
         particles[i].show();
     }
     counter++;
     if(counter > 100){
         counter = 0;
     }
+    if(particles[i].finished == true){
+      particles.splice(i, 1);
+    }
+  }
 }
 
 function windowResized() {
@@ -365,7 +369,7 @@ function mouseWheel(event){
 
 function mouseDragged(){
     if(mouseButton === LEFT && mode == 'drag' && EditMode == false){
-        if(counter % 4 == 0){
+        if(counter % 1 == 0){
         newparticle = new particle(mouseX, mouseY);
         particles.push(newparticle);
         }
