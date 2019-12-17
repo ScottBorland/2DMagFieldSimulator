@@ -3,6 +3,8 @@ function northPole(x, y, strength){
     this.y = y;
     this.s = strength;
 
+    this.show = true;
+
     this.w = this.s * 0.75;
 
     this.fillColour = color(255, 0, 42);
@@ -14,7 +16,7 @@ function northPole(x, y, strength){
     this.offsetY;
 
     this.display = function(){
-
+        if(this.show == true){
         if(this.dragging){
             this.fillColour = color(122, 23, 39);
         }else if(this.rollover){
@@ -35,6 +37,7 @@ function northPole(x, y, strength){
         //textFont(myFont, 36 * this.s /40);
         //text('N', this.x, this.y);
         pop();
+      }
     }
 
     this.drag = function(){
@@ -55,6 +58,8 @@ function southPole(x, y, strength){
     this.y = y;
     this.s = strength;
 
+    this.show = true;
+
     this.w = 0.75 * this.s;
 
     this.fillColour = color(0, 12, 252);
@@ -66,6 +71,7 @@ function southPole(x, y, strength){
     this.offsetY;
 
     this.display = function(){
+      if(this.show == true){
         if(this.dragging){
             this.fillColour = color(0, 4, 86);
         }else if(this.rollover){
@@ -87,6 +93,7 @@ function southPole(x, y, strength){
         noFill();
         //ellipse(this.x, this.y, this.s * strengthScaler);
         pop();
+      }
     }
     this.drag = function(){
     if(mouseX > this.x && mouseX < this.x + this.w && mouseY > this.y && mouseY < this.y + this.w && EditMode)

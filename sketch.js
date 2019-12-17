@@ -34,6 +34,7 @@ var preset4Button;
 var showDirButton;
 var disperseParticlesButton;
 var trimPointsButton;
+var showPolesButton;
 
 /*var myFont;
 function preload() {
@@ -41,7 +42,7 @@ function preload() {
 }*/
 
 function setup() {
-    background(250);
+    background(255, 255, 255);
     //disperseParticles();
     //createCanvas(1905, 880);
     var cnv = createCanvas(windowWidth -15,windowHeight - 200);
@@ -99,11 +100,9 @@ function setup() {
     disperseParticlesButton.mousePressed(disperseParticles);
     disperseParticlesButton.parent('sketch-holder');
 
-    /*
-    trimPointsButton = createButton("trim points");
-    trimPointsButton.mousePressed(calltrimPoints);
-    trimPointsButton.parent('sketch-holder');
-    */
+    showPolesButton = createButton("Show poles");
+    showPolesButton.mousePressed(showPoles);
+    showPolesButton.parent('sketch-holder');
 }
 //fps counter
  let be = Date.now(),fps=0;
@@ -126,6 +125,17 @@ function setup() {
          kpFps.value = fps
      }
   )
+
+function showPoles(){
+  for(var i = 0; i < northPoles.length; i++){
+    if(northPoles[i].show == true) northPoles[i].show = false;
+    else if (northPoles[i].show == false) northPoles[i].show = true;
+  }
+  for(var i = 0; i < southPoles.length; i++){
+    if(southPoles[i].show == true) southPoles[i].show = false;
+    else if (southPoles[i].show == false) southPoles[i].show = true;
+  }
+}
 
 function disperseParticles(){
   var particlePositions = [];
@@ -184,6 +194,9 @@ function trimPoints(Array){
 
 function draw() {
 
+    if(EditMode){
+      background(255, 255, 255);
+    }
 
     for(var i = northPoles.length -1; i >= 0; i--){
     northPoles[i].display();
@@ -225,12 +238,14 @@ function windowResized() {
 
 function clearTrails(){
     particles.splice(0, particles.length);
+    background(backgroundColour);
 }
 
 function clearCanvas(){
     northPoles.splice(0, northPoles.length);
     southPoles.splice(0, southPoles.length);
     particles.splice(0, particles.length);
+    background(255, 255, 255);
 }
 
 function showDirection(){
