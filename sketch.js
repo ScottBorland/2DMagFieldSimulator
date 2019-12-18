@@ -20,6 +20,8 @@ var maxGradDifference = 0.005;
 var mode = 'click';
 var EditMode = false;
 
+var showPoles = true;
+
 //buttons
 var modeButton;
 var toggleEditModeButton;
@@ -56,8 +58,10 @@ function preload() {
 
 function setup() {
     background(255, 255, 255);
-    //disperseParticles();
-    //createCanvas(1905, 880);
+
+    //this can be played around with, scale is between 1 and 4, fallout is from 0 to 1. (4, 1) gives a very washed out look. (2, 0.2) seems the best so far.
+    noiseDetail(3, 0.1);
+
     var cnv = createCanvas(windowWidth -15,windowHeight - 200);
     cnv.style('display', 'block');
     cnv.parent('sketch-holder');
@@ -114,7 +118,7 @@ function setup() {
     disperseParticlesButton.parent('sketch-holder');
 
     showPolesButton = createButton("Show poles");
-    showPolesButton.mousePressed(showPoles);
+    showPolesButton.mousePressed(showPolesFn);
     showPolesButton.parent('sketch-holder');
 }
 //fps counter
@@ -139,14 +143,16 @@ function setup() {
      }
   )
 
-function showPoles(){
-  for(var i = 0; i < northPoles.length; i++){
-    if(northPoles[i].show == true) northPoles[i].show = false;
-    else if (northPoles[i].show == false) northPoles[i].show = true;
-  }
-  for(var i = 0; i < southPoles.length; i++){
-    if(southPoles[i].show == true) southPoles[i].show = false;
-    else if (southPoles[i].show == false) southPoles[i].show = true;
+function showPolesFn(){
+  if(showPoles) showPoles = false;
+  else if(!showPoles) {
+    showPoles = true;
+    for(var i = 0; i < northPoles.length; i++){
+      northPoles[i].erased = false;
+    }
+    for(var i = 0; i < southPoles.length; i++){
+      southPoles[i].erased = false;
+    }
   }
 }
 
@@ -220,15 +226,6 @@ function draw() {
     southPoles[i].drag();
     }
     for(var i = particles.length -1; i >= 0; i--){
-      /*if(particles[i].finished == true){
-        particles.splice(i, 1);
-      } else{
-        particles[i].update();
-        particles[i].behaviours();
-        particles[i].show();
-      }*/
-
-
 
    if(particles[i].finished == false){
           particles[i].update();
