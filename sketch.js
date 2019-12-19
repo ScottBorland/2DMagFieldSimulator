@@ -3,7 +3,8 @@ southPoles = [];
 particles = [];
 
 var showDir = false;
-var proximity = 30;
+var proximity = 10;
+var randomDispersion = false;
 
 var mouseDragging = false;
 
@@ -60,7 +61,7 @@ function setup() {
     background(255, 255, 255);
 
     //this can be played around with, scale is between 1 and 4, fallout is from 0 to 1. (4, 1) gives a very washed out look. (2, 0.2) seems the best so far.
-    noiseDetail(3, 0.1);
+    noiseDetail(2, 0.2);
 
     var cnv = createCanvas(windowWidth -15,windowHeight - 200);
     cnv.style('display', 'block');
@@ -120,6 +121,11 @@ function setup() {
     showPolesButton = createButton("Show poles");
     showPolesButton.mousePressed(showPolesFn);
     showPolesButton.parent('sketch-holder');
+
+    paintPictureButton = createButton("Paint picture");
+    //paintPictureButton.mousePressed(paintPicture);
+    paintPictureButton.mousePressed(function() { paintPicture(20, 4);});
+    paintPictureButton.parent('sketch-holder');
 }
 //fps counter
  let be = Date.now(),fps=0;
@@ -158,6 +164,7 @@ function showPolesFn(){
 
 function disperseParticles(){
   var particlePositions = [];
+  if(randomDispersion == false){
   for(var i = 10; i < windowWidth - 10; i += proximity){
     for(var j = 10; j < windowHeight -10; j += proximity){
       newPos = createVector(i, j);
@@ -165,6 +172,12 @@ function disperseParticles(){
       //console.log(particlePositions);
     }
   }
+}else{
+  for(var i = 0; i < 10000; i ++){
+    newPos = createVector(random(windowWidth), random(windowHeight));
+    particlePositions.push(newPos);
+  }
+}
   for(var k = 0; k < particlePositions.length; k++){
     var newParticle = new particle(particlePositions[k].x, particlePositions[k].y);
     particles.push(newParticle);
@@ -188,27 +201,16 @@ function calltrimPoints(){
   }
 }*/
 
-function trimPoints(Array){
-    var pointsArray = Array;
-    let pointsToSplice = [];
-    var listFullyTrimmed = false;
-    if(listFullyTrimmed == false){
-    for(var i = 2; i < (pointsArray.length - 5); i++){
-      var grad1 = (pointsArray[i + 1].y - pointsArray[i].y) / (pointsArray[i + 1].x - pointsArray[i].x);
-      var grad2 = (pointsArray[i + 2].y - pointsArray[i + 1].y) / (pointsArray[i + 2].x - pointsArray[i + 1].x);
-      if(Math.abs(grad1 - grad2) < maxGradDifference){
-        pointsToSplice.push(i);
-      }
-    }
-
-  for(var i = 0; i < pointsToSplice.length; i++){
-    var index = pointsToSplice[i];
-    if(index < pointsArray.length - 2){
-    pointsArray.splice(index + 1, 1);
+function paintPicture(n, s){
+  clearCanvas();
+  showPoles = false;
+  for(var i = 0; i < n; i++){
+    northPoles.push(new northPole(random(windowWidth), random(windowHeight), random(40)));
   }
-    }
+  for(var i = 0; i < s; i++){
+    southPoles.push(new southPole(random(windowWidth), random(windowHeight), random(40)));
   }
-  return pointsArray;
+  disperseParticles();
 }
 
 function draw() {
@@ -244,6 +246,7 @@ function draw() {
   var rx = xr + iR;
   var gx = xg + iG;
   var bx = xb + iB;
+  //change these values to tint the colour
   r = map(noise(rx, 1), 0, 1, 0, 255);
   g = map(noise(gx, 1), 0, 1, 0, 255);
   b = map(noise(bx, 1), 0, 1, 0, 255);
@@ -280,11 +283,6 @@ function addNorth(){
 function addSouth(){
     southPoles.push(new southPole(windowWidth /2 + random(50), (windowHeight -200) / 2 + random(50), 20));
 }
-
-/*function showDirection(){
-  if(showDirection == true) showDirection = false;
-  else showDirection = true;
-}*/
 
 function preset1(){
     clearCanvas();
