@@ -31,9 +31,9 @@ function northPole(x, y, strength){
       rectMode(CENTER);
       stroke(18, 17, 18);
       if(!showPoles){
-        fill(255, 255, 255);
+        fill(backgroundColour);
         strokeWeight(4);
-        stroke(255);
+        stroke(backgroundColour);
         this.erased = true;
       }else{
         fill(this.fillColour);
@@ -96,9 +96,9 @@ function southPole(x, y, strength){
         rectMode(CENTER);
         stroke(18, 17, 18);
         if(!showPoles){
-          fill(255, 255, 255);
+          fill(backgroundColour);
           strokeWeight(4);
-          stroke(255, 255, 255);
+          stroke(backgroundColour);
           this.erased = true;
         }else{
           strokeWeight(1);

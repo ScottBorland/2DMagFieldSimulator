@@ -58,7 +58,7 @@ function preload() {
 }*/
 
 function setup() {
-    background(255, 255, 255);
+    background(51);
 
     //this can be played around with, scale is between 1 and 4, fallout is from 0 to 1. (4, 1) gives a very washed out look. (2, 0.2) seems the best so far.
     noiseDetail(2, 0.2);
@@ -124,8 +124,10 @@ function setup() {
 
     paintPictureButton = createButton("Paint picture");
     //paintPictureButton.mousePressed(paintPicture);
-    paintPictureButton.mousePressed(function() { paintPicture(20, 4);});
+    paintPictureButton.mousePressed(function() { paintPicture(10, 5);});
     paintPictureButton.parent('sketch-holder');
+
+    backgroundColour = color(51)
 }
 //fps counter
  let be = Date.now(),fps=0;
@@ -205,10 +207,10 @@ function paintPicture(n, s){
   clearCanvas();
   showPoles = false;
   for(var i = 0; i < n; i++){
-    northPoles.push(new northPole(random(windowWidth), random(windowHeight), random(40)));
+    northPoles.push(new northPole(random(windowWidth), random(windowHeight), random(400)));
   }
   for(var i = 0; i < s; i++){
-    southPoles.push(new southPole(random(windowWidth), random(windowHeight), random(40)));
+    southPoles.push(new southPole(random(windowWidth), random(windowHeight), random(400)));
   }
   disperseParticles();
 }
@@ -216,7 +218,7 @@ function paintPicture(n, s){
 function draw() {
 
     if(EditMode){
-      background(255, 255, 255);
+      background(backgroundColour);
     }
 
     for(var i = northPoles.length -1; i >= 0; i--){
@@ -262,14 +264,14 @@ function windowResized() {
 
 function clearTrails(){
     particles.splice(0, particles.length);
-    background(255, 255, 255);
+    background(backgroundColour);
 }
 
 function clearCanvas(){
     northPoles.splice(0, northPoles.length);
     southPoles.splice(0, southPoles.length);
     particles.splice(0, particles.length);
-    background(255, 255, 255);
+    background(backgroundColour);
 }
 
 function showDirection(){
