@@ -8,69 +8,98 @@ var showDir = false;
 var proximity = 10;
 var randomDispersion = false;
 
-var mouseDragging = false;
-
 var counter = 0;
 //scalers
 var strengthScaler = 50;
 var distanceScaler = 500;
 var velMultiplier = 10;
 
+var universeSize = 500;
+
 var showPoles = true;
 
 let scene, camera, renderer, sphere, controls;
+
+function setup(){
+  northPoles.push(new northPole(0, 0, 0, 40));
+  southPoles.push(new southPole(80, 60, 120, 30));
+  northPoles.push(new northPole(50, 20, 50, 20));
+  southPoles.push(new southPole(200, 60, 10, 40));
+  particles.push(new particle(10, 10, 10));
+  particles.push(new particle(30, 10, 20));
+
+  renderPoles();
+}
 
 function init(){
   scene = new THREE.Scene();
   camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
   renderer = new THREE.WebGLRenderer({antialias: true});
 
+  var light = new THREE.AmbientLight( 0x404040 ); // soft white light
+  scene.add( light );
+
   renderer.setSize(window.innerWidth, window.innerHeight);
   document.body.appendChild(renderer.domElement);
 
-  var controls = new THREE.OrbitControls( camera, renderer.domElement );
+  controls = new THREE.OrbitControls( camera, renderer.domElement );
 
-  const geometry = new THREE.SphereGeometry(5, 32, 32);
-  //const material = new THREE.MeshBasicMaterial({color: 0x0000ff});
-  const texture = new THREE.TextureLoader().load('textures/MilkyWay/dark-s_pz.jpg');
-  const material = new THREE.MeshBasicMaterial({map : texture});
-
-  sphere = new THREE.Mesh(geometry, material);
-  scene.add(sphere);
+  //scene.background = new THREE.Color("rgb(255, 255, 255)");
 
   camera.position.z = 100;
-  //controls.update();
+  controls.enableKeys = true;
+  controls.keys = {
+	LEFT: 37, //left arrow
+	UP: 38, // up arrow
+	RIGHT: 39, // right arrow
+	BOTTOM: 40 // down arrow
+  }
+  controls.zoomSpeed = 2.5;
+  controls.keyPanSpeed = 25;
+  controls.update();
 }
 
-function draw(){
-  sphere.position.x = 100;
-  sphere.position.y = 0;
-  sphere.position.z = 0;
-}
 
-function setup() {
-  window.addEventListener('resize', onWindowResize, false);
+window.addEventListener('resize', onWindowResize, false);
 
-  init();
-  animate();
-}
+init();
+animate();
 
 function animate(){
   requestAnimationFrame(animate);
 
-  //controls.update();
-
-  sphere.rotation.x += 0.01;
-  sphere.rotation.y += 0.01;
+  controls.update();
 
   renderer.render(scene, camera);
 }
-// function draw(){
-// window.addEventListener('resize', onWindowResize, false);
-//
-// init();
-// animate();
-// }
+function draw(){
+  // for(var i = northPoles.length -1; i >= 0; i--){
+  //     northPoles[i].display();
+  //     }
+  // for(var i = southPoles.length -1; i >= 0; i--){
+  //     southPoles[i].display()
+  //    }
+  for(var i = particles.length -1; i >= 0; i--){
+        if(particles[i].finished == false){
+            particles[i].update();
+            particles[i].behaviours();
+            particles[i].show();
+         }
+      }
+  counter ++;
+  if(counter % 10 == 0){
+  spawnParticle();
+  }
+}
+
+function renderPoles(){
+  for(var i = northPoles.length -1; i >= 0; i--){
+      northPoles[i].display();
+      }
+  for(var i = southPoles.length -1; i >= 0; i--){
+      southPoles[i].display()
+     }
+}
 
 function onWindowResize(){
   camera.aspect = window.innerWidth / window.innerHeight;
@@ -89,6 +118,11 @@ function showPolesFn(){
       southPoles[i].erased = false;
     }
   }
+}
+
+function spawnParticle(){
+  let newparticle = new particle(random(-universeSize / 2, universeSize), random(-universeSize / 2, universeSize), random(-universeSize / 2, universeSize / 2));
+  particles.push(newparticle);
 }
 
 function disperseParticles(){
@@ -165,9 +199,6 @@ function paintPicture(n, s){
 //   }
 // }
 
-function windowResized() {
-  resizeCanvas(windowWidth -15, windowHeight - 200);
-}
 
 function clearTrails(){
     particles.splice(0, particles.length);
