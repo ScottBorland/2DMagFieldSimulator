@@ -5,7 +5,7 @@ southPoles = [];
 particles = [];
 
 var showDir = false;
-var proximity = 10;
+var proximity = 100;
 var randomDispersion = false;
 
 var counter = 0;
@@ -14,21 +14,27 @@ var strengthScaler = 50;
 var distanceScaler = 500;
 var velMultiplier = 10;
 
-var universeSize = 500;
+var universeSize = 250;
 
 var showPoles = true;
 
 let scene, camera, renderer, sphere, controls;
 
 function setup(){
-  northPoles.push(new northPole(0, 0, 0, 40));
-  southPoles.push(new southPole(80, 60, 120, 30));
-  northPoles.push(new northPole(50, 20, 50, 20));
-  southPoles.push(new southPole(200, 60, 10, 40));
-  particles.push(new particle(10, 10, 10));
-  particles.push(new particle(30, 10, 20));
+  // northPoles.push(new northPole(0, 0, 0, 40));
+  // southPoles.push(new southPole(80, 60, 120, 30));
+  // northPoles.push(new northPole(50, 20, 50, 20));
+  // southPoles.push(new southPole(200, 60, 10, 40));
+  // particles.push(new particle(10, 10, 10));
+  // particles.push(new particle(30, 10, 20));
+
+  southPoles.push(new northPole(-40, 0, 0, 40));
+  northPoles.push(new southPole(-80, 0, 0, 40));
+  northPoles.push(new northPole(80, 0, 0, 40));
+  southPoles.push(new southPole(40, 0, 0, 40));
 
   renderPoles();
+  disperseParticles();
 }
 
 function init(){
@@ -86,10 +92,10 @@ function draw(){
             particles[i].show();
          }
       }
-  counter ++;
-  if(counter % 10 == 0){
-  spawnParticle();
-  }
+  // counter ++;
+  // if(counter % 10 == 0){
+  // spawnParticle();
+  // }
 }
 
 function renderPoles(){
@@ -105,6 +111,23 @@ function onWindowResize(){
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
   renderer.setSize(window.innerWidth, window.innerHeight);
+}
+
+function disperseParticles(){
+var particlePositions = [];
+for(var i = -universeSize; i < universeSize; i += proximity){
+  for(var j = -universeSize; j < universeSize; j += proximity){
+    for(var k = -universeSize; k < universeSize; k+= proximity){
+      newPos = createVector(i, j, k);
+      particlePositions.push(newPos);
+    }
+  }
+}
+//console.log(particlePositions)
+for(var l = 0; l < particlePositions.length; l++){
+  var newParticle = new particle(particlePositions[l].x, particlePositions[l].y, particlePositions[l].z);
+  particles.push(newParticle);
+  }
 }
 
 function showPolesFn(){
@@ -125,27 +148,27 @@ function spawnParticle(){
   particles.push(newparticle);
 }
 
-function disperseParticles(){
-  var particlePositions = [];
-  if(randomDispersion == false){
-  for(var i = 10; i < windowWidth - 10; i += proximity){
-    for(var j = 10; j < windowHeight -10; j += proximity){
-      newPos = createVector(i, j);
-      particlePositions.push(newPos);
-      //console.log(particlePositions);
-    }
-  }
-}else{
-  for(var i = 0; i < 10000; i ++){
-    newPos = createVector(random(windowWidth), random(windowHeight));
-    particlePositions.push(newPos);
-  }
-}
-  for(var k = 0; k < particlePositions.length; k++){
-    var newParticle = new particle(particlePositions[k].x, particlePositions[k].y);
-    particles.push(newParticle);
-  }
-}
+// function disperseParticles(){
+//   var particlePositions = [];
+//   if(randomDispersion == false){
+//   for(var i = 10; i < windowWidth - 10; i += proximity){
+//     for(var j = 10; j < windowHeight -10; j += proximity){
+//       newPos = createVector(i, j);
+//       particlePositions.push(newPos);
+//       //console.log(particlePositions);
+//     }
+//   }
+// }else{
+//   for(var i = 0; i < 10000; i ++){
+//     newPos = createVector(random(windowWidth), random(windowHeight));
+//     particlePositions.push(newPos);
+//   }
+// }
+//   for(var k = 0; k < particlePositions.length; k++){
+//     var newParticle = new particle(particlePositions[k].x, particlePositions[k].y);
+//     particles.push(newParticle);
+//   }
+// }
 
 function roundVector(vector){
   let x = vector.x;
