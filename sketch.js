@@ -5,7 +5,7 @@ southPoles = [];
 particles = [];
 
 var showDir = false;
-var proximity = 100;
+var proximity = 120;
 var randomDispersion = false;
 
 var counter = 0;
@@ -13,6 +13,26 @@ var counter = 0;
 var strengthScaler = 50;
 var distanceScaler = 500;
 var velMultiplier = 10;
+
+var northPolesToSpawn = 2;
+var southPolesToSpawn = 4;
+
+var r;
+var g;
+var b;
+
+//perlin noise variables
+var xr = 0.0;
+var xg = 100.0;
+var xb = 2000.0;
+
+//arbitrary values
+var iR = 1000;
+var iB = 100;
+var iG = 1;
+
+//rate at which perlin noise function is looped through
+var speed = 0.04;
 
 var universeSize = 250;
 
@@ -28,10 +48,11 @@ function setup(){
   // particles.push(new particle(10, 10, 10));
   // particles.push(new particle(30, 10, 20));
 
-  southPoles.push(new northPole(-40, 0, 0, 40));
-  northPoles.push(new southPole(-80, 0, 0, 40));
-  northPoles.push(new northPole(80, 0, 0, 40));
-  southPoles.push(new southPole(40, 0, 0, 40));
+  // southPoles.push(new northPole(-40, 0, 0, 40));
+  // northPoles.push(new southPole(-80, 0, 0, 40));
+  // northPoles.push(new northPole(80, 0, 0, 40));
+  // southPoles.push(new southPole(40, 0, 0, 40));
+  randomlySpawnPoles();
 
   renderPoles();
   disperseParticles();
@@ -92,10 +113,40 @@ function draw(){
             particles[i].show();
          }
       }
-  // counter ++;
+  //perlin noise
+  var rx = xr + iR;
+  var gx = xg + iG;
+  var bx = xb + iB;
+  //change these values to tint the colour
+  r = map(noise(rx, 1), 0, 1, 0, 255);
+  g = map(noise(gx, 1), 0, 1, 0, 255);
+  b = map(noise(bx, 1), 0, 1, 0, 255);
+  r = Math.floor(r);
+  g = Math.floor(g);
+  b = Math.floor(b);
+
+  xr += speed;
+  xg += speed;
+  xb += speed;
+  counter ++;
   // if(counter % 10 == 0){
   // spawnParticle();
   // }
+}
+
+function randomlySpawnPoles(){
+  for(var i = 0; i < northPolesToSpawn; i++){
+  var randX = random(-universeSize + 50, universeSize - 50);
+  var randY = random(-universeSize + 50, universeSize - 50);
+  var randZ = random(-universeSize + 50, universeSize - 50);
+  northPoles.push(new northPole(randX, randY, randZ, 40));
+  }
+  for(var i = 0; i < southPolesToSpawn; i++){
+  var randX = random(-universeSize + 50, universeSize - 50);
+  var randY = random(-universeSize + 50, universeSize - 50);
+  var randZ = random(-universeSize + 50, universeSize - 50);
+  southPoles.push(new southPole(randX, randY, randZ, 40));
+  }
 }
 
 function renderPoles(){

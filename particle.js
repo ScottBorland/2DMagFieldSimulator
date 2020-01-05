@@ -1,7 +1,7 @@
 function particle(x, y, z){
     this.position = createVector(x, y, z);
     this.velocity = createVector(0, 0, 0);
-    this.maxspeed = 2;
+    this.maxspeed = 3;
     this.angle = 0;
 
     this.velN = createVector(0, 0, 0);
@@ -22,7 +22,7 @@ function particle(x, y, z){
         this.velocity.mult(velMultiplier);
         this.velocity.limit(this.maxspeed);
         this.position.add(this.velocity);
-        if(this.velocity.mag() > 0.5){
+        if(this.velocity.mag() > 0){
           this.newLine = true;
         }else{
           this.newLine = false;
@@ -80,6 +80,7 @@ function particle(x, y, z){
     this.show = function(){
         if(this.finished == false && this.newLine){
         if(this.history.length > 1){
+        if(counter % 2 == 0){
         let index = this.history.length - 1;
 
         var material = new THREE.LineBasicMaterial({color: color});
@@ -88,14 +89,13 @@ function particle(x, y, z){
         geometry.vertices.push(new THREE.Vector3(this.position.x, this.position.y, this.position.z));
         geometry.vertices.push(new THREE.Vector3(this.history[index].x, this.history[index].y, this.history[index].z));
         var line = new THREE.Line(geometry, material);
-        var r = 76
-        var g = 53
-        var b = 14
+
         var colour = 'rgb(' + parseFloat(r) + ',' + parseFloat(g) + ',' + parseFloat(b) + ')';
         line.material.color = new THREE.Color(colour);
         // line.material.color = new THREE.Color(0xffffff * Math.random());
         line.material.needsUpdate = true;
         scene.add(line);
+        }
       }
 
         // if(this.finished && this.history.length > 4 && showDir == true){
