@@ -1,7 +1,7 @@
 function particle(x, y, z){
     this.position = createVector(x, y, z);
     this.velocity = createVector(0, 0, 0);
-    this.maxspeed = 3;
+    this.maxspeed = 1;
     this.angle = 0;
 
     this.velN = createVector(0, 0, 0);
@@ -76,11 +76,21 @@ function particle(x, y, z){
        this.applyForceN(dif);
     }
 
+    const generateColor = (forceMag = this.velocity.mag()) => {
+            console.log(forceMag)
+            const rgbArray = [
+                1 / (- 0.01 * (forceMag - 1.4)) - 80,
+                - 700 * (forceMag) * (forceMag - 1),
+                1 / (0.01 * (forceMag + 0.4))
+            ]
+            const [red, green, blue] = rgbArray.map(value => Math.round(value))
+            return `rgb(${red},${green},${blue})`
+        }
 
     this.show = function(){
         if(this.finished == false && this.newLine){
         if(this.history.length > 1){
-        if(counter % 2 == 0){
+        if(counter % 3 == 0){
         let index = this.history.length - 1;
 
         var material = new THREE.LineBasicMaterial({color: color});
@@ -91,7 +101,7 @@ function particle(x, y, z){
         var line = new THREE.Line(geometry, material);
 
         var colour = 'rgb(' + parseFloat(r) + ',' + parseFloat(g) + ',' + parseFloat(b) + ')';
-        line.material.color = new THREE.Color(colour);
+        line.material.color = new THREE.Color(generateColor());
         // line.material.color = new THREE.Color(0xffffff * Math.random());
         line.material.needsUpdate = true;
         scene.add(line);

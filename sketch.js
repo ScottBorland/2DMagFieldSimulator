@@ -12,7 +12,7 @@ var counter = 0;
 //scalers
 var strengthScaler = 50;
 var distanceScaler = 500;
-var velMultiplier = 10;
+var velMultiplier = 1;
 
 var northPolesToSpawn = 2;
 var southPolesToSpawn = 4;
