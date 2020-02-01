@@ -98,8 +98,8 @@ function particle(x, y){
 
         if(this.history.length > 1){
         let index = this.history.length - 1;
-        let c = color(r, g, b);
-        stroke(c);
+        //let c = color(r, g, b);
+        stroke(24, 46, 68);
         line(this.position.x, this.position.y, this.history[index].x, this.history[index].y);
       }
 
