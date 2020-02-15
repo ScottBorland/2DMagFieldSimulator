@@ -3,7 +3,7 @@ southPoles = [];
 particles = [];
 
 var showDir = false;
-var proximity = 10;
+var proximity = 20;
 var randomDispersion = false;
 
 var mouseDragging = false;
@@ -11,7 +11,7 @@ var mouseDragging = false;
 var counter = 0;
 //scalers
 var strengthScaler = 50;
-var distanceScaler = 500;
+var distanceScaler = 10;
 var velMultiplier = 10;
 
 //default to 0.15, lower means curve has more detail
@@ -39,29 +39,8 @@ var disperseParticlesButton;
 var trimPointsButton;
 var showPolesButton;
 
-// //perlin noise variables
-// var xr = 0.0;
-// var xg = 100.0;
-// var xb = 2000.0;
-//
-// //arbitrary values
-// var iR = 1000;
-// var iB = 100;
-// var iG = 1;
-
-//rate at which perlin noise function is looped through
-var speed = 0.04;
-
-/*var myFont;
-function preload() {
-  myFont = loadFont('assets/Anonymous_Pro.ttf');
-}*/
-
 function setup() {
     background(51);
-
-    //this can be played around with, scale is between 1 and 4, fallout is from 0 to 1. (4, 1) gives a very washed out look. (2, 0.2) seems the best so far.
-    noiseDetail(2, 0.2);
 
     var cnv = createCanvas(windowWidth -15,windowHeight - 200);
     cnv.style('display', 'block');
@@ -124,10 +103,10 @@ function setup() {
 
     paintPictureButton = createButton("Paint picture");
     //paintPictureButton.mousePressed(paintPicture);
-    paintPictureButton.mousePressed(function() { paintPicture(10, 5);});
+    paintPictureButton.mousePressed(function() { paintPicture(5, 5);});
     paintPictureButton.parent('sketch-holder');
 
-    backgroundColour = color(51)
+    backgroundColour = color(0)
 }
 //fps counter
  let be = Date.now(),fps=0;
@@ -193,15 +172,6 @@ function roundVector(vector){
   y = Number(y.toFixed(2));
   return createVector(x, y);
 }
-/*
-function calltrimPoints(){
-  for(var i = particles.length -1; i >= 0; i--){
-    if(particles[i].history.length > 8){
-    particles[i].history = trimPoints(particles[i].history);
-    //delSomePoints(particles[i].history);
-    }
-  }
-}*/
 
 function paintPicture(n, s){
   clearCanvas();
@@ -244,18 +214,6 @@ function draw() {
       particles.splice(i, 1);
     }
   }
-  // //perlin noise
-  // var rx = xr + iR;
-  // var gx = xg + iG;
-  // var bx = xb + iB;
-  // //change these values to tint the colour
-  // r = map(noise(rx, 1), 0, 1, 0, 255);
-  // g = map(noise(gx, 1), 0, 1, 0, 255);
-  // b = map(noise(bx, 1), 0, 1, 0, 255);
-  //
-  // xr += speed;
-  // xg += speed;
-  // xb += speed;
 }
 
 function windowResized() {

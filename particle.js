@@ -1,7 +1,7 @@
 function particle(x, y){
     this.position = createVector(x, y);
     this.velocity = createVector(0, 0);
-    this.maxspeed = 2;
+    this.maxspeed = 1;
     this.angle = 0;
 
     this.velN = createVector(0, 0);
@@ -78,28 +78,47 @@ function particle(x, y){
         this.applyForceS(dif);
     }
 
+    //method 1 of color generation, blue when magnitude of force weakest, green in middle, red when strongest
+    //optimal with distanceScaler 10
+    // const generateColor = (forceMag = this.velocity.mag()) => {
+    //         const rgbArray = [
+    //             1 / (- 0.01 * (forceMag - 1.4)) - 80,
+    //             - 700 * (forceMag) * (forceMag - 1),
+    //             1 / (0.01 * (forceMag + 0.4))
+    //         ]
+    //         const [red, green, blue] = rgbArray.map(value => Math.round(value))
+    //         var particleColour = color (red, green, blue)
+    //         return particleColour
+    //     }
+
+    const generateColor = (forceMag = createVector(this.velN.mag(), this.velS.mag())) => {
+          forceMag.setMag(0.91);
+          //console.log(forceMag);
+            // const rgbArray = [
+            //     1 / (- 0.01 * (forceMag.x - 1.4)) - 80,
+            //     30,
+            //     1 / (-0.01 * (forceMag.y - 1.4)) - 80
+            // ]
+            const rgbArray = [
+                100 * Math.pow(forceMag.x + 0.2, 8),
+                60,
+                100 * Math.pow(forceMag.y + 0.2, 8)
+            ]
+            const [red, green, blue] = rgbArray.map(value => Math.round(value))
+            var particleColour = color (red, green, blue)
+            return particleColour
+        }
 
     this.show = function(){
         if(this.finished == false){
         var angle = this.velocity.heading() + PI / 2;
-        /*push();
-        translate(this.position.x, this.position.y);
-        rotate(angle);
-        fill(103, 47, 138);
-        stroke(103, 47, 138);
-        strokeWeight(1);
-        beginShape();
-        vertex(0, -5);
-        vertex(-2.5, 5);
-        vertex(2.5, 5);
-        endShape(CLOSE);
-        pop();*/
         }
 
         if(this.history.length > 1){
         let index = this.history.length - 1;
-        //let c = color(r, g, b);
-        stroke(24, 46, 68);
+        let c = generateColor();
+        console.log(generateColor())
+        stroke(c);
         line(this.position.x, this.position.y, this.history[index].x, this.history[index].y);
       }
 
