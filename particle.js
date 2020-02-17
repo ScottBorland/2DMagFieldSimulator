@@ -13,6 +13,8 @@ function particle(x, y, z){
     this.newLine = false;
 
     this.update = function(){
+        console.log(this.velS)
+
         var pos = createVector(this.position.x, this.position.y, this.position.z);
         this.history.push(pos);
         this.velocity = createVector(0, 0, 0);
@@ -72,19 +74,36 @@ function particle(x, y, z){
 
        dif.setMag(mag);
 
-       this.applyForceN(dif);
+       this.applyForceS(dif);
     }
 
-    const generateColor = (forceMag = this.velocity.mag()) => {
-            //console.log(forceMag)
+    // const generateColor = (forceMag = this.velocity.mag()) => {
+    //         //console.log(forceMag)
+    //         const rgbArray = [
+    //             1 / (- 0.01 * (forceMag - 1.4)) - 80,
+    //             - 700 * (forceMag) * (forceMag - 1),
+    //             1 / (0.01 * (forceMag + 0.4))
+    //         ]
+    //         const [red, green, blue] = rgbArray.map(value => Math.round(value))
+    //         return `rgb(${red},${green},${blue})`
+    //     }
+    const generateColor = (forceMag = createVector(this.velN.mag(), this.velS.mag())) => {
+          forceMag.setMag(0.91);
+          console.log(forceMag);
+            // const rgbArray = [
+            //     1 / (- 0.01 * (forceMag.x - 1.4)) - 80,
+            //     30,
+            //     1 / (-0.01 * (forceMag.y - 1.4)) - 80
+            // ]
             const rgbArray = [
-                1 / (- 0.01 * (forceMag - 1.4)) - 80,
-                - 700 * (forceMag) * (forceMag - 1),
-                1 / (0.01 * (forceMag + 0.4))
+                100 * Math.pow(forceMag.x + 0.2, 8),
+                60,
+                100 * Math.pow(forceMag.y + 0.2, 8)
             ]
             const [red, green, blue] = rgbArray.map(value => Math.round(value))
+            var particleColour = color (red, green, blue)
             return `rgb(${red},${green},${blue})`
-        }
+            }
 
     this.show = function(){
         if(this.finished == false && this.newLine){

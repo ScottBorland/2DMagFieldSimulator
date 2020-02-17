@@ -34,7 +34,7 @@ var iG = 1;
 //rate at which perlin noise function is looped through
 var speed = 0.04;
 
-var universeSizeX = 150;
+var universeSizeX = 200;
 var universeSizeY = 100;
 var universeSizeZ = 100;
 
@@ -50,11 +50,11 @@ function setup(){
   // particles.push(new particle(10, 10, 10));
   // particles.push(new particle(30, 10, 20));
 
-  northPoles.push(new northPole(-40, 0, 0, 40));
-  southPoles.push(new southPole(-80, 0, 0, 40));
-  northPoles.push(new northPole(80, 0, 0, 40));
-  southPoles.push(new southPole(40, 0, 0, 40));
-  //randomlySpawnPoles();
+  // northPoles.push(new northPole(-40, 0, 0, 40));
+  // southPoles.push(new southPole(-80, 0, 0, 40));
+  // northPoles.push(new northPole(80, 0, 0, 40));
+  // southPoles.push(new southPole(40, 0, 0, 40));
+  randomlySpawnPoles();
 
   renderPoles();
   spawnParticlesAroundNorthPoles();
