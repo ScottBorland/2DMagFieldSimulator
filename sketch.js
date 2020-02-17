@@ -5,7 +5,7 @@ southPoles = [];
 particles = [];
 
 var showDir = false;
-var proximity = 120;
+var proximity = 50;
 var randomDispersion = false;
 
 var counter = 0;
@@ -34,7 +34,9 @@ var iG = 1;
 //rate at which perlin noise function is looped through
 var speed = 0.04;
 
-var universeSize = 250;
+var universeSizeX = 150;
+var universeSizeY = 100;
+var universeSizeZ = 100;
 
 var showPoles = true;
 
@@ -48,14 +50,14 @@ function setup(){
   // particles.push(new particle(10, 10, 10));
   // particles.push(new particle(30, 10, 20));
 
-  // southPoles.push(new northPole(-40, 0, 0, 40));
-  // northPoles.push(new southPole(-80, 0, 0, 40));
-  // northPoles.push(new northPole(80, 0, 0, 40));
-  // southPoles.push(new southPole(40, 0, 0, 40));
-  randomlySpawnPoles();
+  northPoles.push(new northPole(-40, 0, 0, 40));
+  southPoles.push(new southPole(-80, 0, 0, 40));
+  northPoles.push(new northPole(80, 0, 0, 40));
+  southPoles.push(new southPole(40, 0, 0, 40));
+  //randomlySpawnPoles();
 
   renderPoles();
-  disperseParticles();
+  spawnParticlesAroundNorthPoles();
 }
 
 function init(){
@@ -136,15 +138,15 @@ function draw(){
 
 function randomlySpawnPoles(){
   for(var i = 0; i < northPolesToSpawn; i++){
-  var randX = random(-universeSize + 50, universeSize - 50);
-  var randY = random(-universeSize + 50, universeSize - 50);
-  var randZ = random(-universeSize + 50, universeSize - 50);
+  var randX = random(-universeSizeX + 50, universeSizeX - 50);
+  var randY = random(-universeSizeY + 50, universeSizeY - 50);
+  var randZ = random(-universeSizeZ + 50, universeSizeZ - 50);
   northPoles.push(new northPole(randX, randY, randZ, 40));
   }
   for(var i = 0; i < southPolesToSpawn; i++){
-  var randX = random(-universeSize + 50, universeSize - 50);
-  var randY = random(-universeSize + 50, universeSize - 50);
-  var randZ = random(-universeSize + 50, universeSize - 50);
+  var randX = random(-universeSizeX + 50, universeSizeX - 50);
+  var randY = random(-universeSizeY + 50, universeSizeY - 50);
+  var randZ = random(-universeSizeZ + 50, universeSizeZ - 50);
   southPoles.push(new southPole(randX, randY, randZ, 40));
   }
 }
@@ -164,17 +166,85 @@ function onWindowResize(){
   renderer.setSize(window.innerWidth, window.innerHeight);
 }
 
+function spawnParticlesAroundNorthPoles(){
+  for(var i = 0; i < northPoles.length; i++){
+    var newParticle = new particle(northPoles[i].x + 10, northPoles[i].y - 10, northPoles[i].z +10);
+    particles.push(newParticle);
+    var newParticle = new particle(northPoles[i].x + 10, northPoles[i].y - 10, northPoles[i].z -10);
+    particles.push(newParticle);
+    var newParticle = new particle(northPoles[i].x + 10, northPoles[i].y - 10, northPoles[i].z);
+    particles.push(newParticle);
+    var newParticle = new particle(northPoles[i].x +10, northPoles[i].y + 10, northPoles[i].z + 10);
+    particles.push(newParticle);
+    var newParticle = new particle(northPoles[i].x +10, northPoles[i].y +10, northPoles[i].z);
+    particles.push(newParticle);
+    var newParticle = new particle(northPoles[i].x +10, northPoles[i].y +10, northPoles[i].z -10);
+    particles.push(newParticle);
+    var newParticle = new particle(northPoles[i].x +10, northPoles[i].y, northPoles[i].z);
+    particles.push(newParticle);
+    var newParticle = new particle(northPoles[i].x + 10, northPoles[i].y, northPoles[i].z -10);
+    particles.push(newParticle);
+    var newParticle = new particle(northPoles[i].x + 10, northPoles[i].y, northPoles[i].z +10);
+    particles.push(newParticle);
+    var newParticle = new particle(northPoles[i].x + 10, northPoles[i].y, northPoles[i].z);
+    particles.push(newParticle);
+
+    var newParticle = new particle(northPoles[i].x - 10, northPoles[i].y - 10, northPoles[i].z +10);
+    particles.push(newParticle);
+    var newParticle = new particle(northPoles[i].x - 10, northPoles[i].y - 10, northPoles[i].z -10);
+    particles.push(newParticle);
+    var newParticle = new particle(northPoles[i].x - 10, northPoles[i].y - 10, northPoles[i].z);
+    particles.push(newParticle);
+    var newParticle = new particle(northPoles[i].x -10, northPoles[i].y + 10, northPoles[i].z + 10);
+    particles.push(newParticle);
+    var newParticle = new particle(northPoles[i].x -10, northPoles[i].y +10, northPoles[i].z);
+    particles.push(newParticle);
+    var newParticle = new particle(northPoles[i].x -10, northPoles[i].y +10, northPoles[i].z -10);
+    particles.push(newParticle);
+    var newParticle = new particle(northPoles[i].x -10, northPoles[i].y, northPoles[i].z);
+    particles.push(newParticle);
+    var newParticle = new particle(northPoles[i].x - 10, northPoles[i].y, northPoles[i].z -10);
+    particles.push(newParticle);
+    var newParticle = new particle(northPoles[i].x - 10, northPoles[i].y, northPoles[i].z +10);
+    particles.push(newParticle);
+    var newParticle = new particle(northPoles[i].x - 10, northPoles[i].y, northPoles[i].z);
+    particles.push(newParticle);
+
+    var newParticle = new particle(northPoles[i].x, northPoles[i].y - 10, northPoles[i].z +10);
+    particles.push(newParticle);
+    var newParticle = new particle(northPoles[i].x, northPoles[i].y - 10, northPoles[i].z -10);
+    particles.push(newParticle);
+    var newParticle = new particle(northPoles[i].x, northPoles[i].y - 10, northPoles[i].z);
+    particles.push(newParticle);
+    var newParticle = new particle(northPoles[i].x, northPoles[i].y + 10, northPoles[i].z + 10);
+    particles.push(newParticle);
+    var newParticle = new particle(northPoles[i].x, northPoles[i].y +10, northPoles[i].z);
+    particles.push(newParticle);
+    var newParticle = new particle(northPoles[i].x, northPoles[i].y +10, northPoles[i].z -10);
+    particles.push(newParticle);
+    var newParticle = new particle(northPoles[i].x, northPoles[i].y, northPoles[i].z);
+    particles.push(newParticle);
+    var newParticle = new particle(northPoles[i].x, northPoles[i].y, northPoles[i].z -10);
+    particles.push(newParticle);
+    var newParticle = new particle(northPoles[i].x, northPoles[i].y, northPoles[i].z +10);
+    particles.push(newParticle);
+    var newParticle = new particle(northPoles[i].x, northPoles[i].y, northPoles[i].z);
+    particles.push(newParticle);
+
+  }
+}
+
 function disperseParticles(){
 var particlePositions = [];
-for(var i = -universeSize; i < universeSize; i += proximity){
-  for(var j = -universeSize; j < universeSize; j += proximity){
-    for(var k = -universeSize; k < universeSize; k+= proximity){
+for(var i = -universeSizeX; i < universeSizeX; i += proximity){
+  for(var j = -universeSizeY; j < universeSizeY; j += proximity){
+    for(var k = -universeSizeZ; k < universeSizeZ; k+= proximity){
       newPos = createVector(i, j, k);
       particlePositions.push(newPos);
     }
   }
 }
-//console.log(particlePositions)
+
 for(var l = 0; l < particlePositions.length; l++){
   var newParticle = new particle(particlePositions[l].x, particlePositions[l].y, particlePositions[l].z);
   particles.push(newParticle);
@@ -199,27 +269,7 @@ function spawnParticle(){
   particles.push(newparticle);
 }
 
-// function disperseParticles(){
-//   var particlePositions = [];
-//   if(randomDispersion == false){
-//   for(var i = 10; i < windowWidth - 10; i += proximity){
-//     for(var j = 10; j < windowHeight -10; j += proximity){
-//       newPos = createVector(i, j);
-//       particlePositions.push(newPos);
-//       //console.log(particlePositions);
-//     }
-//   }
-// }else{
-//   for(var i = 0; i < 10000; i ++){
-//     newPos = createVector(random(windowWidth), random(windowHeight));
-//     particlePositions.push(newPos);
-//   }
-// }
-//   for(var k = 0; k < particlePositions.length; k++){
-//     var newParticle = new particle(particlePositions[k].x, particlePositions[k].y);
-//     particles.push(newParticle);
-//   }
-// }
+
 
 function roundVector(vector){
   let x = vector.x;
@@ -241,38 +291,6 @@ function paintPicture(n, s){
   }
   disperseParticles();
 }
-
-// function draw() {
-//
-//     if(EditMode){
-//       background(backgroundColour);
-//     }
-//
-//     for(var i = northPoles.length -1; i >= 0; i--){
-//     northPoles[i].display();
-//     northPoles[i].drag();
-//     }
-//     for(var i = southPoles.length -1; i >= 0; i--){
-//     southPoles[i].display();
-//     southPoles[i].drag();
-//     }
-//     for(var i = particles.length -1; i >= 0; i--){
-//
-//    if(particles[i].finished == false){
-//           particles[i].update();
-//           particles[i].behaviours();
-//         particles[i].show();
-//     }
-//     counter++;
-//     if(counter > 100){
-//         counter = 0;
-//     }
-//     if(particles[i].finished == true){
-//       particles.splice(i, 1);
-//     }
-//   }
-// }
-
 
 function clearTrails(){
     particles.splice(0, particles.length);
@@ -296,18 +314,6 @@ function addNorth(){
 
 function addSouth(){
     southPoles.push(new southPole(windowWidth /2 + random(50), (windowHeight -200) / 2 + random(50), 20));
-}
-
-function preset1(){
-    clearCanvas();
-    northPoles[0] = new northPole(windowWidth / 4 +220, windowHeight / 2 - 100, 100);
-    southPoles[0] = new southPole(windowWidth / 1.47  - 100, windowHeight / 2 - 100, 100);
-}
-
-function preset2(){
-    clearCanvas();
-    northPoles[0] = new northPole(windowWidth / 4 +220, windowHeight / 2 - 100, 100);
-    northPoles[1] = new northPole(windowWidth / 1.47  - 100, windowHeight / 2 - 100, 100);
 }
 
 function mouseReleased(){

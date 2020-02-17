@@ -13,7 +13,6 @@ function particle(x, y, z){
     this.newLine = false;
 
     this.update = function(){
-
         var pos = createVector(this.position.x, this.position.y, this.position.z);
         this.history.push(pos);
         this.velocity = createVector(0, 0, 0);
@@ -52,7 +51,7 @@ function particle(x, y, z){
         var dif = p5.Vector.sub(createVector(magnet.x, magnet.y, magnet.z), this.position);
         var dist = p5.Vector.dist(createVector(magnet.x, magnet.y, magnet.z), this.position);
 
-        if(dist < 6 || this.position.x < -universeSize || this.position.x > universeSize || this.position.y < -universeSize || this.position.y > universeSize || this.position.z < -universeSize || this.position.z > universeSize){
+        if(dist < 6 || this.position.x < -universeSizeX || this.position.x > universeSizeX || this.position.y < -universeSizeY || this.position.y > universeSizeY || this.position.z < -universeSizeZ || this.position.z > universeSizeZ){
              this.finished = true;
         }
         var mag = distanceScaler * magnet.s / (dist * dist);
@@ -66,7 +65,7 @@ function particle(x, y, z){
        var dif = p5.Vector.sub(createVector(magnet.x, magnet.y, magnet.z), this.position);
        var dist = p5.Vector.dist(createVector(magnet.x, magnet.y, magnet.z), this.position);
 
-       if(dist < 6 || this.position.x < -universeSize || this.position.x > universeSize || this.position.y < -universeSize || this.position.y > universeSize || this.position.z < -universeSize || this.position.z > universeSize){
+       if(dist < 6 || this.position.x < -universeSizeX || this.position.x > universeSizeX || this.position.y < -universeSizeY || this.position.y > universeSizeY || this.position.z < -universeSizeZ || this.position.z > universeSizeZ){
             this.finished = true;
        }
        var mag = distanceScaler * magnet.s / (dist * dist);
@@ -77,7 +76,7 @@ function particle(x, y, z){
     }
 
     const generateColor = (forceMag = this.velocity.mag()) => {
-            console.log(forceMag)
+            //console.log(forceMag)
             const rgbArray = [
                 1 / (- 0.01 * (forceMag - 1.4)) - 80,
                 - 700 * (forceMag) * (forceMag - 1),
@@ -90,7 +89,7 @@ function particle(x, y, z){
     this.show = function(){
         if(this.finished == false && this.newLine){
         if(this.history.length > 1){
-        if(counter % 3 == 0){
+        if(counter % 1 == 0){
         let index = this.history.length - 1;
 
         var material = new THREE.LineBasicMaterial({color: color});
