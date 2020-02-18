@@ -117,7 +117,6 @@ function particle(x, y){
         if(this.history.length > 1){
         let index = this.history.length - 1;
         let c = generateColor();
-        console.log(generateColor())
         stroke(c);
         line(this.position.x, this.position.y, this.history[index].x, this.history[index].y);
       }
