@@ -100,6 +100,7 @@ function particle(x, y){
         let index = this.history.length - 1;
         let c = color(r, g, b);
         stroke(c);
+        //stroke(0);
         line(this.position.x, this.position.y, this.history[index].x, this.history[index].y);
       }
 

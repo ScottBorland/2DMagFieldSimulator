@@ -58,7 +58,7 @@ function preload() {
 }*/
 
 function setup() {
-    background(51);
+    background(255);
 
     //this can be played around with, scale is between 1 and 4, fallout is from 0 to 1. (4, 1) gives a very washed out look. (2, 0.2) seems the best so far.
     noiseDetail(2, 0.2);
@@ -124,10 +124,10 @@ function setup() {
 
     paintPictureButton = createButton("Paint picture");
     //paintPictureButton.mousePressed(paintPicture);
-    paintPictureButton.mousePressed(function() { paintPicture(10, 5);});
+    paintPictureButton.mousePressed(function() { paintPicture(10, 10);});
     paintPictureButton.parent('sketch-holder');
 
-    backgroundColour = color(51)
+    backgroundColour = color(255)
 }
 //fps counter
  let be = Date.now(),fps=0;
