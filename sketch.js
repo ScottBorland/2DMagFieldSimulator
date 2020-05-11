@@ -106,7 +106,7 @@ function setup() {
     paintPictureButton.mousePressed(function() { paintPicture(5, 5);});
     paintPictureButton.parent('sketch-holder');
 
-    backgroundColour = color(45, 45, 87)
+    backgroundColour = color(0)
 }
 //fps counter
  let be = Date.now(),fps=0;
