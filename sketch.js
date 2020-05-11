@@ -3,7 +3,7 @@ southPoles = [];
 particles = [];
 
 var showDir = false;
-var proximity = 20;
+var proximity = 40;
 var randomDispersion = false;
 
 var mouseDragging = false;
@@ -106,7 +106,7 @@ function setup() {
     paintPictureButton.mousePressed(function() { paintPicture(5, 5);});
     paintPictureButton.parent('sketch-holder');
 
-    backgroundColour = color(0)
+    backgroundColour = color(45, 45, 87)
 }
 //fps counter
  let be = Date.now(),fps=0;
